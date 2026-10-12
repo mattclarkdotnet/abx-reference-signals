@@ -1,0 +1,39 @@
+{
+  "generator": "REW",
+  "rew_version": "5.40 Beta 101 API 0.9.0",
+  "recipe": {
+    "id": "timing-burst",
+    "signal": "toneburst",
+    "capture_seconds": 8,
+    "configuration": {
+      "frequency": 1000.0,
+      "window": "Cosine",
+      "windowWidth": 1,
+      "windowWidthUnit": "ms",
+      "period": 250,
+      "periodUnit": "ms",
+      "repeat": true
+    }
+  },
+  "effective_configuration": {
+    "frequency": 1000.0,
+    "window": "Cosine",
+    "windowWidth": 1.0,
+    "windowWidthUnit": "ms",
+    "period": 250,
+    "periodUnit": "ms",
+    "repeat": true
+  },
+  "level": {
+    "value": -12.0,
+    "unit": "dBFS"
+  },
+  "device": "BlackHole 2ch",
+  "sample_rate": 48000,
+  "frames": 384000,
+  "channels": 2,
+  "capture_format": "float32",
+  "portaudio": "PortAudio V19.7.0-devel, revision unknown",
+  "script_sha256": "3528b98e1246b32db469af9d2112aaa8249bd1aaaacc2253962f0c3774e66bcf",
+  "sha256": "13f5c4ef335e24e6cc0ba307255e35c8330ae033e8eb626c81a6aa12c0a2ecac"
+}

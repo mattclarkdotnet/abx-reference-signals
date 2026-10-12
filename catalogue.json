@@ -1,0 +1,136 @@
+{
+  "version": "0.1.0",
+  "recipe": "scripted/recipes/reference-v1.json",
+  "recipe_sha256": "00ad69a1e6aabb5ce4b5cdbc91576dfc4e3d0292a62d6be0093f7fc1280f650d",
+  "generator_sha256": "9e49501bd77000b15d8c1198f01a7a6bd160fda0bd5a5d5b0baee0acfe158ccb",
+  "files": [
+    {
+      "id": "reference-400hz",
+      "channels": 2,
+      "path": "scripted/files/reference-400hz-2ch-48k-v0.1.0.wav",
+      "sha256": "c8947ea37c2e5e0ae6e90e0c16ffdbf98b712acc2c0121f348ed3d52e6d16757",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 1440000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-2ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "b60570974cc0947e601ed1704306c67fbfa371fb66555f09a3f40719c838fc1d"
+      ],
+      "sections": null
+    },
+    {
+      "id": "reference-400hz",
+      "channels": 8,
+      "path": "scripted/files/reference-400hz-8ch-48k-v0.1.0.wav",
+      "sha256": "4f453c0f9e5be40fd76ac79af71d7e1ec1b0e0d2527b9e5987bbca8a2976545a",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 1440000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-8ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "b60570974cc0947e601ed1704306c67fbfa371fb66555f09a3f40719c838fc1d"
+      ],
+      "sections": null
+    },
+    {
+      "id": "timing-probe",
+      "channels": 2,
+      "path": "scripted/files/timing-probe-2ch-48k-v0.1.0.wav",
+      "sha256": "711f71f9efa031021d91e647350ac32cbcdff14a91a1d3dfa7c68528d1ad4ccd",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 192000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-2ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "13f5c4ef335e24e6cc0ba307255e35c8330ae033e8eb626c81a6aa12c0a2ecac"
+      ],
+      "sections": null
+    },
+    {
+      "id": "timing-probe",
+      "channels": 8,
+      "path": "scripted/files/timing-probe-8ch-48k-v0.1.0.wav",
+      "sha256": "ef8ba38cb8486e831d6941cbbfef9e90386f283ca115774329a06896280e8797",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 192000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-8ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "13f5c4ef335e24e6cc0ba307255e35c8330ae033e8eb626c81a6aa12c0a2ecac"
+      ],
+      "sections": null
+    },
+    {
+      "id": "complete-characterisation",
+      "channels": 2,
+      "path": "scripted/files/complete-characterisation-2ch-48k-v0.1.0.wav",
+      "sha256": "6fc5677cf3b4d4eea47b85c1e84d02e0dabb7f231ba50e1cd4437e2baa8b4137",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 480000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-2ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "b60570974cc0947e601ed1704306c67fbfa371fb66555f09a3f40719c838fc1d",
+        "13f5c4ef335e24e6cc0ba307255e35c8330ae033e8eb626c81a6aa12c0a2ecac"
+      ],
+      "sections": {
+        "lead": [
+          0,
+          24000
+        ],
+        "tone": [
+          24000,
+          288000
+        ],
+        "gap": [
+          288000,
+          300000
+        ],
+        "timing": [
+          300000,
+          468000
+        ],
+        "tail": [
+          468000,
+          480000
+        ]
+      }
+    },
+    {
+      "id": "complete-characterisation",
+      "channels": 8,
+      "path": "scripted/files/complete-characterisation-8ch-48k-v0.1.0.wav",
+      "sha256": "27ffc051a42df1a1744045464691039795c0d0ab97af99840d6945fa394ca983",
+      "sample_rate": 48000,
+      "format": "PCM_24",
+      "frames": 480000,
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-8ch-48k-v0.1.0.wav",
+      "source_sha256": [
+        "b60570974cc0947e601ed1704306c67fbfa371fb66555f09a3f40719c838fc1d",
+        "13f5c4ef335e24e6cc0ba307255e35c8330ae033e8eb626c81a6aa12c0a2ecac"
+      ],
+      "sections": {
+        "lead": [
+          0,
+          24000
+        ],
+        "tone": [
+          24000,
+          288000
+        ],
+        "gap": [
+          288000,
+          300000
+        ],
+        "timing": [
+          300000,
+          468000
+        ],
+        "tail": [
+          468000,
+          480000
+        ]
+      }
+    }
+  ]
+}

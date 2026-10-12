@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "rew_version": "5.40 Beta 101 API 0.9.0",
+  "device": "BlackHole 2ch",
+  "sample_rate": 48000,
+  "channels": 2,
+  "level": {"value": -12.0, "unit": "dBFS"},
+  "captures": [
+    {
+      "id": "sine-400hz",
+      "signal": "sine",
+      "capture_seconds": 34,
+      "configuration": {
+        "frequency": 400.0,
+        "lockFrequencyToRTAFFT": false,
+        "addHarmonicDistortion": false,
+        "addDither": false,
+        "ditherBits": 24
+      }
+    },
+    {
+      "id": "timing-burst",
+      "signal": "toneburst",
+      "capture_seconds": 8,
+      "configuration": {
+        "frequency": 1000.0,
+        "window": "Cosine",
+        "windowWidth": 1,
+        "windowWidthUnit": "ms",
+        "period": 250,
+        "periodUnit": "ms",
+        "repeat": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "catalogue_sha256": "cbd192edecb9f3c62edb345589d0e84e95cc002797b13de84f910bc3bf5a8967",
+  "validator_sha256": "5a999fd1f7309c2e38fe80d5b513fac12e49fbee2cfb9e4a96d86d8441480900",
+  "files": [
+    {
+      "path": "scripted/files/reference-400hz-2ch-48k-v0.1.0.wav",
+      "sha256": "c8947ea37c2e5e0ae6e90e0c16ffdbf98b712acc2c0121f348ed3d52e6d16757",
+      "peak_dbfs": -12.000000253286988,
+      "frequency_hz": 400.0,
+      "steady_rms_dbfs": -15.007466117195476,
+      "harmonics_2_to_9_dbr": -144.6695540416385,
+      "whole_tone_out_of_band_dbr": -135.27003962572866
+    },
+    {
+      "path": "scripted/files/reference-400hz-8ch-48k-v0.1.0.wav",
+      "sha256": "4f453c0f9e5be40fd76ac79af71d7e1ec1b0e0d2527b9e5987bbca8a2976545a",
+      "peak_dbfs": -12.000000253286988,
+      "frequency_hz": 400.0,
+      "steady_rms_dbfs": -15.007466117195476,
+      "harmonics_2_to_9_dbr": -144.6695540416385,
+      "whole_tone_out_of_band_dbr": -135.27003962572866
+    },
+    {
+      "path": "scripted/files/timing-probe-2ch-48k-v0.1.0.wav",
+      "sha256": "711f71f9efa031021d91e647350ac32cbcdff14a91a1d3dfa7c68528d1ad4ccd",
+      "peak_dbfs": -12.000000253286988,
+      "probe_count": 16,
+      "period_frames": 12000,
+      "adjacent_sample_correlation": 0.9893221011925555
+    },
+    {
+      "path": "scripted/files/timing-probe-8ch-48k-v0.1.0.wav",
+      "sha256": "ef8ba38cb8486e831d6941cbbfef9e90386f283ca115774329a06896280e8797",
+      "peak_dbfs": -12.000000253286988,
+      "probe_count": 16,
+      "period_frames": 12000,
+      "adjacent_sample_correlation": 0.9893221011925555
+    },
+    {
+      "path": "scripted/files/complete-characterisation-2ch-48k-v0.1.0.wav",
+      "sha256": "6fc5677cf3b4d4eea47b85c1e84d02e0dabb7f231ba50e1cd4437e2baa8b4137",
+      "peak_dbfs": -12.000000253286988,
+      "frequency_hz": 400.0,
+      "steady_rms_dbfs": -15.007466117195477,
+      "harmonics_2_to_9_dbr": -144.669555887927,
+      "whole_tone_out_of_band_dbr": -134.98649805380214,
+      "probe_count": 14,
+      "period_frames": 12000,
+      "adjacent_sample_correlation": 0.9893221011925555
+    },
+    {
+      "path": "scripted/files/complete-characterisation-8ch-48k-v0.1.0.wav",
+      "sha256": "27ffc051a42df1a1744045464691039795c0d0ab97af99840d6945fa394ca983",
+      "peak_dbfs": -12.000000253286988,
+      "frequency_hz": 400.0,
+      "steady_rms_dbfs": -15.007466117195477,
+      "harmonics_2_to_9_dbr": -144.669555887927,
+      "whole_tone_out_of_band_dbr": -134.98649805380214,
+      "probe_count": 14,
+      "period_frames": 12000,
+      "adjacent_sample_correlation": 0.9893221011925555
+    }
+  ]
+}

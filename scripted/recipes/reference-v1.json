@@ -1,0 +1,27 @@
+{
+  "version": "0.1.0",
+  "sample_rate": 48000,
+  "peak_dbfs": -12.0,
+  "reference_seconds": 30,
+  "timing_seconds": 4,
+  "tone": {
+    "frequency_hz": 400,
+    "guard_seconds": 0.05,
+    "ramp_seconds": 0.2,
+    "passband_hz": [300, 500],
+    "stopband_edges_hz": [200, 600],
+    "filter_rejection_db": 120,
+    "minimum_out_of_band_rejection_db": 100,
+    "minimum_harmonic_rejection_db": 110
+  },
+  "sequence_seconds": {
+    "lead": 0.5,
+    "tone": 5.5,
+    "gap": 0.25,
+    "timing": 3.5,
+    "tail": 0.25
+  },
+  "channel_variants": [2, 8],
+  "github_repository": "mattclarkdotnet/abx-reference-signals",
+  "release_tag": "reference-v0.1.0"
+}

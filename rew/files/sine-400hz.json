@@ -1,0 +1,35 @@
+{
+  "generator": "REW",
+  "rew_version": "5.40 Beta 101 API 0.9.0",
+  "recipe": {
+    "id": "sine-400hz",
+    "signal": "sine",
+    "capture_seconds": 34,
+    "configuration": {
+      "frequency": 400.0,
+      "lockFrequencyToRTAFFT": false,
+      "addHarmonicDistortion": false,
+      "addDither": false,
+      "ditherBits": 24
+    }
+  },
+  "effective_configuration": {
+    "frequency": 400.0,
+    "lockFrequencyToRTAFFT": false,
+    "addHarmonicDistortion": false,
+    "addDither": false,
+    "ditherBits": 24
+  },
+  "level": {
+    "value": -12.0,
+    "unit": "dBFS"
+  },
+  "device": "BlackHole 2ch",
+  "sample_rate": 48000,
+  "frames": 1632000,
+  "channels": 2,
+  "capture_format": "float32",
+  "portaudio": "PortAudio V19.7.0-devel, revision unknown",
+  "script_sha256": "3528b98e1246b32db469af9d2112aaa8249bd1aaaacc2253962f0c3774e66bcf",
+  "sha256": "b60570974cc0947e601ed1704306c67fbfa371fb66555f09a3f40719c838fc1d"
+}
