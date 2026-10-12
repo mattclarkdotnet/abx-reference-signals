@@ -2,6 +2,8 @@
 
 The scripts shape the included REW recordings, assemble the combined sequence
 and write stereo and eight-channel WAVs.
+See [Signal design and measurement background](../DESIGN.md) for the reasons
+behind the waveform and format choices.
 
 ## Set up the tools
 

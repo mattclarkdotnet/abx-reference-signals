@@ -1,6 +1,9 @@
 # Audio reference signals
 
-WAV files for measuring audio levels, distortion, relative delay and polarity.
+WAV references for preparing repeatable comparisons of audio equipment: match
+levels, check distortion, and establish relative delay and polarity. A steady
+tone supports level measurements; a short burst gives timing measurements a
+recognisable event. The combined file puts both stages into one playback.
 
 ## Download
 
@@ -18,6 +21,10 @@ All files are **48 kHz, 24-bit PCM WAV**, with a peak level of **−12 dBFS**.
 Stereo and eight-channel versions carry identical, time-aligned signals on every
 channel.
 
+The signals share a moderate test level and enough sample precision to keep small
+harmonics visible. Their [design background](DESIGN.md) explains the measurement
+goals and the trade-offs behind the waveforms, format and levels.
+
 [File details and sequence timings](FILES.md) · [Release files](https://github.com/mattclarkdotnet/abx-reference-signals/releases/tag/reference-v0.1.0) · [SHA-256 checksums](SHA256SUMS)
 
 ## Waveforms
@@ -29,12 +36,24 @@ The plots show one channel, with amplitude relative to digital full scale.
 A 30-second sine wave with a smooth, bandwidth-limited start and finish. Use the
 steady section for output-voltage, level and distortion measurements.
 
+The frequency accommodates the limited AC bandwidth of handheld meters while
+leaving several harmonics within the audio band. A long steady section allows
+readings to settle and measurements to be repeated. Shaping the boundaries keeps
+the stimulus concentrated around the tone as playback starts and stops.
+[Reference-tone rationale](DESIGN.md#a-stable-level-reference).
+
 ![400 Hz reference tone: full timeline, smooth onset and offset, and a close-up of the sine wave.](docs/waveforms/reference-400hz.png)
 
 ### Timing and polarity probe
 
 A four-second sequence of one-millisecond, cosine-windowed 1 kHz bursts, repeated
 every 250 ms. Use the bursts to compare arrival times and polarity.
+
+A continuous sine repeats the same phase every cycle, which makes delay and
+polarity difficult to distinguish. The short bipolar burst provides an event
+that can be aligned between recordings before comparing its sign. Repetition
+provides multiple measurement opportunities during one playback.
+[Timing-probe rationale](DESIGN.md#a-recognisable-timing-event).
 
 ![Timing and polarity probe: repeated bursts across four seconds and the sample waveform of one burst.](docs/waveforms/timing-probe.png)
 
@@ -43,6 +62,12 @@ every 250 ms. Use the bursts to compare arrival times and polarity.
 A ten-second sequence combining the 400 Hz tone and timing probes for level,
 distortion, delay and polarity measurements in one playback. See the
 [section timings](FILES.md#complete-sequence).
+
+This version is intended for a measurement system that is ready before playback.
+It gives level measurements the longer steady interval, then supplies repeated
+probes for timing checks. Keeping both stages in one file preserves the source
+settings and channel routing between measurements.
+[Sequence rationale](DESIGN.md#a-short-coordinated-sequence).
 
 ![Complete characterisation: ten-second tone-and-probe sequence with a close-up of the transition through silence.](docs/waveforms/complete-characterisation.png)
 
@@ -56,6 +81,7 @@ delay and polarity, capture the two outputs simultaneously.
 
 ## Further documentation
 
+- [Signal design and measurement background](DESIGN.md)
 - [Generate files from the saved recordings](scripted/README.md)
 - [Make fresh REW recordings](rew/README.md)
 - [Validation and measured results](validation/README.md)

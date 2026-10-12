@@ -31,6 +31,9 @@ The reference tone must meet these spectral limits:
   including its start and finish.
 - Steady-state harmonics 2–9 combined below −110 dBR, relative to the fundamental.
 
+The [design background](../DESIGN.md#a-stable-level-reference) explains how these
+limits support the intended level and distortion measurements.
+
 For byte-for-byte reproduction, also compare the generated WAVs with the original
 release's checksums. The generator writes a new `SHA256SUMS`, so keep the original
 checksum file separately.

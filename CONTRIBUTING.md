@@ -2,6 +2,9 @@
 
 Keep original recordings separate from filtering, channel expansion and sequence
 assembly. Retain recipes, generation code and measured results for each release.
+When changing a signal, update its measurement goals and trade-offs in
+[DESIGN.md](DESIGN.md), its README description, and the corresponding recipe and
+validation requirements together.
 
 ## Update the file guide and plots
 
