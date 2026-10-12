@@ -1,47 +1,39 @@
 # Check the reference files
 
-These tools check the audio stored in the WAV files. They do not measure the
-accuracy of a DAC, amplifier, audio input or meter.
+## Verify release checksums
 
-## Check a downloaded release
-
-Download `SHA256SUMS` alongside the six WAVs from the same release. In that download
-directory, check that the files are unchanged. On macOS:
+Download `SHA256SUMS` alongside the six WAVs from the same release. Run this in
+the download directory on macOS:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
 ```
 
-On Linux, the equivalent command is `sha256sum -c SHA256SUMS`. This checks file
-identity against the release; it does not measure signal quality.
+On Linux, use `sha256sum -c SHA256SUMS`.
 
 ## Measure the saved audio
 
-First follow the [environment setup](../scripted/README.md#set-up-the-tools).
-From the repository's top-level directory, run:
+Set up the [Python environment](../scripted/README.md#set-up-the-tools), then run
+from the repository's top-level directory:
 
 ```sh
 uv run --locked python validation/src/validate.py
 ```
 
 The validator checks format, sample rate, duration, channel equality, peak level,
-file and section boundaries, frequency, harmonics, out-of-band energy, probe
-spacing and catalogue hashes. It prints the measurements and writes
-`validation/reports/signals.json`. A failure stops with an explanation of the
-failed requirement. For a separate generation directory, add `--root` followed
-by its path.
+boundaries, frequency, harmonics, out-of-band energy, probe spacing and catalogue
+hashes. It writes measurements to `validation/reports/signals.json` and reports
+any failed requirement. Add `--root PATH` to check a separate generation directory.
 
-For the reference tone, the recipe requires at least 100 dB rejection outside
-200–600 Hz over the complete waveform, including its start and finish, without
-an analysis window. Steady-state harmonics 2–9 combined must be below −110 dBR
-(decibels relative to the fundamental). These are numerical limits: a
-finite-duration waveform cannot have literally zero energy at every frequency
-outside its passband.
+The reference tone must meet these spectral limits:
 
-Validation checks each file against its accompanying catalogue. After generating
-new files, that catalogue contains new hashes. Passing validation therefore means
-the new files meet the requirements; to establish byte-for-byte reproduction,
-also compare with the original release's separately saved checksums.
+- At least 100 dB rejection outside 200–600 Hz, measured over the complete tone,
+  including its start and finish.
+- Steady-state harmonics 2–9 combined below −110 dBR, relative to the fundamental.
+
+For byte-for-byte reproduction, also compare the generated WAVs with the original
+release's checksums. The generator writes a new `SHA256SUMS`, so keep the original
+checksum file separately.
 
 ## Run the script tests
 
@@ -50,29 +42,22 @@ uv run --locked python -m unittest discover -s rew/tests
 uv run --locked python -m unittest discover -s validation/tests
 ```
 
-These local tests use simulated API/audio responses and saved sample data; they
-do not require REW or audio hardware. They cover invalid API responses, a REW
-version differing from the selected recipe, missing capture devices, dropped
-samples, invalid audio, altered files, abrupt tone gating, missing probes and
-rebuilding from saved recordings.
+The tests use simulated API/audio responses and saved samples. They cover invalid
+responses, version mismatches, missing devices, capture errors, altered files,
+abrupt tone gating, missing probes and reproduction from saved recordings.
 
-## Read the release reports
+## Release reports
 
-- [signals.json](reports/signals.json): measurements of the published WAVs,
-  identified by their hashes.
-- [reproduction.json](reports/reproduction.json): an independent fresh REW capture
-  assessed against the same requirements. Its hashes describe that run.
-- [rew-api-5.40-beta101.json](reports/rew-api-5.40-beta101.json): the REW API
-  operations inspected for the release baseline. An API inventory alone does
-  not establish signal quality.
-- [hosted.json](reports/hosted.json): checks that the public downloads match the
-  local release files.
+- [signals.json](reports/signals.json): measurements of the published WAVs.
+- [reproduction.json](reports/reproduction.json): independent REW recapture measurements.
+- [rew-api-5.40-beta101.json](reports/rew-api-5.40-beta101.json): API operations available in the release baseline.
+- [hosted.json](reports/hosted.json): public-download checksum verification.
 
-To repeat the public-download check, run:
+To repeat the download check:
 
 ```sh
 uv run --locked python validation/src/verify_downloads.py
 ```
 
-This downloads the URLs in `catalogue.json` without authentication and compares
-the responses with the local files. It requires an internet connection.
+This fetches the URLs in `catalogue.json` anonymously and compares them with the
+local files.

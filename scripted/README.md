@@ -1,13 +1,12 @@
-# Rebuild the reference files
+# Generate files from the saved recordings
 
-Rebuild the WAVs from the included REW recordings using the Python environment
-described below. The scripts add smooth ramps, filter the reference tone,
-assemble the combined sequence and write stereo and eight-channel files.
+The scripts shape the included REW recordings, assemble the combined sequence
+and write stereo and eight-channel WAVs.
 
 ## Set up the tools
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and
-[Git](https://git-scm.com/downloads), then open a terminal:
+[Git](https://git-scm.com/downloads), then run:
 
 ```sh
 git clone https://github.com/mattclarkdotnet/abx-reference-signals.git
@@ -15,59 +14,59 @@ cd abx-reference-signals
 uv sync --locked
 ```
 
-Alternatively, download and unpack the repository ZIP from GitHub, then run
-`uv sync --locked` in its top-level directory. All commands below run from that
-same directory.
+Alternatively, unpack the repository ZIP and run `uv sync --locked` in its
+top-level directory. Run all subsequent commands from that directory.
 
-uv creates the Python environment and installs the packages in `uv.lock`,
-downloading Python if needed. The project supports Python 3.12 or newer and
-selects the 3.12 series by default. To try another supported Python version, use
-uv's [`--python` option](https://docs.astral.sh/uv/concepts/python-versions/).
-The [release baseline](../README.md#release-generation-baseline) records what was
-actually used; other versions need validation rather than an assumption of
-identical output.
+uv sets up Python and the packages in `uv.lock`. The scripts require Python 3.12
+or newer; `.python-version` selects the 3.12 series by default. Use uv's
+[`--python` option](https://docs.astral.sh/uv/concepts/python-versions/) to select
+another version.
 
-NumPy and SciPy provide numerical processing and filtering; soundfile reads and
-writes WAVs. sounddevice is used only when making fresh recordings. The optional
-`docs` dependency group adds Matplotlib to rebuild the waveform illustrations.
+## Release generation baseline
 
-## Rebuild and check
+Environment used to generate and check release **v0.1.0**:
 
-Run these commands in a fresh clone or working copy: they rewrite generated WAVs,
-the catalogue, checksums and validation report in that copy.
+| Component | Release baseline |
+|---|---|
+| Room EQ Wizard | 5.40 Beta 101, API 0.9.0 |
+| Virtual audio driver | BlackHole 2ch 0.7.1 |
+| Python | CPython 3.12.11 |
+| Operating system for fresh captures | macOS 27.2 |
+
+The [REW capture guide](../rew/README.md) covers fresh recordings and selecting a
+REW build. Run the same validation checks when using another tool version.
+
+## Generate and check
+
+These commands write the WAVs, catalogue, checksums and validation report in your
+working copy. Save the release's `SHA256SUMS` separately first if you want to
+compare the generated files with that release.
 
 ```sh
 uv run --locked python scripted/src/generate.py
 uv run --locked python validation/src/validate.py
 ```
 
-The six output WAVs are in `scripted/files/`; measurements are written to
-`validation/reports/signals.json`. To compare the rebuilt files with a release,
-keep that release's `SHA256SUMS` separately before running the generator, which
-creates a new checksum file. See [validation instructions](../validation/README.md)
-for the distinction between matching release bytes and passing the signal checks.
+Outputs are in `scripted/files/`; measurements are in
+`validation/reports/signals.json`. See [validation instructions](../validation/README.md)
+for checksums, signal requirements and tests.
 
-To record new source material first, follow [Fresh REW captures](../rew/README.md).
-That workflow keeps a new capture in a separate directory and builds it with
-`--root`, leaving the release's source recordings intact.
-
-## What the processing does
+## Signal processing
 
 [recipes/reference-v1.json](recipes/reference-v1.json) defines durations, levels,
-channel variants and the reference tone's numerical spectral limits.
+channel variants and spectral limits.
 
-The 400 Hz tone is taken from a settled part of the REW recording. Guard silence
-and cosine ramps are added, then a Kaiser-windowed finite impulse response (FIR)
-band-pass filter limits its spectrum. The guard intervals retain the filter tails.
-The validator includes the whole onset and offset when checking out-of-band
-energy, and measures harmonics in the steady part.
+The reference tone uses a settled section of the REW sine recording, with guard
+silence and cosine ramps. A Kaiser-windowed finite impulse response (FIR)
+band-pass filter limits its spectrum; the guard intervals retain the filter tails.
+Validation includes the whole onset and offset when checking out-of-band energy
+and measures harmonics in the steady section.
 
 Timing sections retain complete REW bursts and are cut between them. The
-ten-second sequence uses shorter tone and probe sections. After shaping, peaks
-are normalised to −12 dBFS and samples are rounded to 24-bit PCM. Channel expansion
-copies the same samples to every channel; the player controls their routing.
+combined sequence uses shorter tone and probe sections. Peaks are normalised to
+−12 dBFS, samples are rounded to 24-bit PCM, and the same samples are copied to
+every channel.
 
-Rebuilding from the saved recordings reproduced identical WAV bytes in the release
-baseline. Fresh REW recordings may differ in start phase or capture latency, so
-they are assessed against the same signal requirements, not a promise of identical
-bytes. Every new output still has a checksum identifying its particular contents.
+Rebuilding the saved recordings with the release baseline reproduces the release
+checksums. Fresh recordings can vary in start phase and capture latency; validate
+them against the signal requirements.

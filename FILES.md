@@ -4,7 +4,7 @@ WAV references for measuring audio levels, distortion, relative delay and polari
 See the [waveform previews and usage guide](README.md#waveforms) to choose a signal.
 
 All files are 24-bit PCM at 48 kHz, peak -12 dBFS.
-Every channel carries the same simultaneous signal. Choose stereo unless your player and interface need eight channels.
+Both variants carry identical, time-aligned signals on every channel.
 
 | Signal | Channels | Duration | Download |
 |---|---:|---:|---|
@@ -25,9 +25,5 @@ Every channel carries the same simultaneous signal. Choose stereo unless your pl
 | Timing and polarity probes | 6.25 s | 9.75 s |
 | Closing silence | 9.75 s | 10 s |
 
-The tone includes guard silence and shaped ramps; measure the steady interior.
-The steady sine RMS is approximately 3.01 dB below its peak, before any analogue playback gain.
-The source equipment determines the analogue output voltage. Use the meter reading for voltage calibration.
-
-This guide is generated from [the catalogue](catalogue.json).
-For regeneration instructions, see [Updating the collection](CONTRIBUTING.md#update-the-file-guide-and-plots).
+Measure levels and distortion during the steady section of the tone.
+Its steady RMS level is approximately -15.01 dBFS.

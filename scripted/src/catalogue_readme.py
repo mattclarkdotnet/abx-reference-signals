@@ -1,5 +1,6 @@
 """Render the file guide and README downloads from the generated catalogue."""
 import json
+import math
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[2]
@@ -37,7 +38,7 @@ lines = ['# Downloadable files', '',
          'WAV references for measuring audio levels, distortion, relative delay and polarity.',
          'See the [waveform previews and usage guide](README.md#waveforms) to choose a signal.', '',
          f"All files are 24-bit PCM at {recipe['sample_rate'] / 1000:g} kHz, peak {recipe['peak_dbfs']:g} dBFS.",
-         'Every channel carries the same simultaneous signal. Choose stereo unless your player and interface need eight channels.', '',
+         'Both variants carry identical, time-aligned signals on every channel.', '',
          '| Signal | Channels | Duration | Download |', '|---|---:|---:|---|']
 for item in catalogue['files']:
     lines.append(f"| {names[item['id']]} | {item['channels']} | {item['frames'] / item['sample_rate']:g} s | [{Path(item['path']).name}]({item['url']}) |")
@@ -45,10 +46,7 @@ lines += ['', '## Complete sequence', '', '| Section | From | To |', '|---|---:|
 complete = next(f for f in catalogue['files'] if f['id'] == 'complete-characterisation')
 for name, (start, end) in complete['sections'].items():
     lines.append(f'| {sections[name]} | {start / complete["sample_rate"]:g} s | {end / complete["sample_rate"]:g} s |')
-lines += ['', 'The tone includes guard silence and shaped ramps; measure the steady interior.',
-          'The steady sine RMS is approximately 3.01 dB below its peak, before any analogue playback gain.',
-          'The source equipment determines the analogue output voltage. Use the meter reading for voltage calibration.', '',
-          'This guide is generated from [the catalogue](catalogue.json).',
-          'For regeneration instructions, see [Updating the collection](CONTRIBUTING.md#update-the-file-guide-and-plots).', '']
+lines += ['', 'Measure levels and distortion during the steady section of the tone.',
+          f"Its steady RMS level is approximately {recipe['peak_dbfs'] - 10 * math.log10(2):.2f} dBFS.", '']
 (root / 'FILES.md').write_text('\n'.join(lines))
 readme_path.write_text(updated_readme)
