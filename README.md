@@ -1,137 +1,124 @@
-# Reference signals
+# Audio reference signals
 
-A portable collection of reproducible audio references, published in
-[abx-reference-signals](https://github.com/mattclarkdotnet/abx-reference-signals).
-It is also retained as a self-contained directory in the ABX controller project.
-The retained files pass the numerical qualification described below.
+Ready-to-play WAV files for checking audio levels, distortion, relative delay and
+polarity. Download a signal below, or use the included recordings, recipes and
+scripts to reproduce it. No ABX controller or other project-specific hardware is
+needed to use these files.
 
-The initial delivery uses 24-bit, 48 kHz PCM WAV: a bandwidth-limited 400 Hz
-reference tone, a timing/polarity probe, and a ten-second sequence combining the
-two for DUT characterisation. Stereo channels carry the same simultaneous signal;
-eight-channel variants support the selected USB source arrangement. See the
-generated [file guide](FILES.md), [catalogue](catalogue.json) and [checksums](SHA256SUMS).
+## Download
 
-Play the test signal through both DUTs simultaneously. Playback belongs to the
-user's source system. The controller observes the DUT outputs; these tools neither
-control DUT playback nor turn the phone into the audio source. For absolute
-voltage calibration, the meter reading is the reference, not a digital file level.
+<!-- BEGIN SIGNAL DOWNLOADS -->
+
+| Signal | Duration | Stereo | 8-channel |
+|---|---:|---|---|
+| 400 Hz reference tone | 30 s | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-2ch-48k-v0.1.0.wav) | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-8ch-48k-v0.1.0.wav) |
+| Timing and polarity probe | 4 s | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-2ch-48k-v0.1.0.wav) | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-8ch-48k-v0.1.0.wav) |
+| Complete characterisation sequence | 10 s | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-2ch-48k-v0.1.0.wav) | [Download WAV](https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-8ch-48k-v0.1.0.wav) |
+
+<!-- END SIGNAL DOWNLOADS -->
+
+All downloads are **48 kHz, 24-bit PCM WAV**, with a peak level of **−12 dBFS**.
+Choose **stereo** for ordinary two-channel playback; choose **8-channel** when your
+player and audio interface need eight channels. Every channel contains the same
+signal, aligned in time. You do not need REW, BlackHole or Python to play the files.
+
+See the [file guide](FILES.md) for exact filenames and sequence timings, or the
+[release page](https://github.com/mattclarkdotnet/abx-reference-signals/releases/tag/reference-v0.1.0)
+for all files and [SHA-256 checksums](SHA256SUMS).
 
 ## Waveforms
 
-These plots use the actual samples in the published WAVs. All channels in both
-the stereo and eight-channel versions carry the same waveform, so each plot
-applies to both downloads. Amplitude is relative to digital full scale; overviews
-show the minimum and maximum samples in each plotted interval, preserving brief
-peaks. Close-ups labelled “samples” show the waveform itself.
+The plots show the actual published WAV samples. Each applies to both channel
+variants. Amplitude is relative to digital full scale. Overview plots preserve
+the minimum and maximum samples in each interval; close-ups labelled “samples”
+show the individual waveform.
 
 ### 400 Hz reference tone
 
-A 30-second steady tone with a smooth, bandwidth-limited start and finish. Use it
-for voltage calibration or standalone level and distortion measurements.
+Use this 30-second tone to measure output voltage or compare levels and
+distortion. Its smooth, bandwidth-limited start and finish avoid an abrupt step;
+take measurements during the steady part of the tone.
 
 ![400 Hz reference tone: full timeline, smooth onset and offset, and a close-up of the sine wave.](docs/waveforms/reference-400hz.png)
 
 ### Timing and polarity probe
 
-A four-second train of short probes, repeated every 250 ms. Each probe is a
-one-millisecond, cosine-windowed 1 kHz burst, returning to silence between probes.
-The close-up shows its positive and negative lobes.
+Use this four-second sequence to compare signal arrival times and polarity.
+A one-millisecond, cosine-windowed 1 kHz burst repeats every 250 ms, returning to
+silence between bursts. The close-up shows its positive and negative lobes.
 
 ![Timing and polarity probe: repeated bursts across four seconds and the sample waveform of one burst.](docs/waveforms/timing-probe.png)
 
-### Complete DUT characterisation
+### Complete characterisation sequence
 
-One ten-second file combines the tone for levels and distortion with the probes
-for delay and polarity. It starts with 0.5 seconds of silence, followed by
-5.5 seconds of tone, a 0.25-second gap, 3.5 seconds of probes and a 0.25-second tail.
+Use this ten-second file when you want to check levels and distortion, then delay
+and polarity, in one playback. It combines a shorter reference tone with the
+timing probes, separated by silence. Measurement software must recognise those
+sections; the file itself does not perform or report measurements.
 
 ![Complete characterisation: ten-second tone-and-probe sequence with a close-up of the transition through silence.](docs/waveforms/complete-characterisation.png)
 
-## Layout
+## Using the signals
 
-- `rew/`: REW API tools, generation recipes and unmodified virtual-device captures.
-- `scripted/`: subsequent signal processing, channel expansion and composition.
-- `validation/`: file qualification tools and reports tied to the checked files.
-- `docs/waveforms/`: PNG illustrations generated from the published PCM files.
+Play the downloaded WAV through the audio equipment you want to measure and
+observe its output with your meter, recorder or measurement software. For an A/B
+comparison, the devices under test (DUTs) need the same source arrangement used
+for listening: **Play the test signal through both DUTs simultaneously.**
 
-The generation method determines the directory. An API script that asks REW to
-generate samples still produces a REW original. Shaping or combining that result
-produces a scripted derivative with explicit source provenance.
+The digital level does not specify an analogue voltage: that depends on your
+player, volume setting and audio interface. For voltage calibration, use the
+meter reading. For delay and polarity comparisons, record the outputs against
+the same time reference.
 
-## Environment
+## Reproducing the files
 
-Install uv, then run from this directory:
+There are two ways to reproduce the collection:
 
-```sh
-uv sync --locked
-uv run python -m unittest discover -s rew/tests
-uv run python scripted/src/generate.py
-uv run python validation/src/validate.py
-uv run python -m unittest discover -s validation/tests
-uv run python scripted/src/catalogue_readme.py
-```
+- **Rebuild from the included recordings:** install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+  and follow the [rebuild instructions](scripted/README.md). uv sets up Python and
+  the required packages. REW and an audio loopback driver are not needed for this.
+- **Make fresh source recordings:** also install [Room EQ Wizard (REW)](https://www.roomeqwizard.com/)
+  with its API and an audio loopback driver. Follow the [REW capture instructions](rew/README.md)
+  for the supplied macOS/BlackHole workflow, including installation, permissions,
+  API setup and using another REW version.
 
-To rebuild the 2000-pixel-wide README images from the retained WAVs:
+### Release generation baseline
 
-```sh
-uv run --locked --group docs python scripted/src/plot_waveforms.py
-```
+Release **v0.1.0** was generated and checked with the following environment.
+These are the versions used for that release, not a requirement to install those
+exact versions or downgrade an existing installation.
 
-The plotting script checks the catalogue hashes and confirms that all channel
-variants share identical samples before drawing a single plot for each waveform.
-It does not regenerate or modify the audio.
+| Component | Release baseline |
+|---|---|
+| Room EQ Wizard | 5.40 Beta 101, API 0.9.0 |
+| Virtual audio driver | BlackHole 2ch 0.7.1 |
+| Python | CPython 3.12.11 |
+| Operating system for fresh captures | macOS 27.2 |
 
-The Python pin and lockfile live here so the directory can be used independently
-of the controller workspace. REW generation needs the documented REW installation,
-its local API and BlackHole 2ch; see [REW instructions](rew/README.md).
+The Python project declares Python 3.12 or newer; `.python-version` selects the
+3.12 series by default. [uv.lock](uv.lock) records the package versions used for
+reproduction. Other environments should be checked with the supplied
+[validation tools](validation/README.md). The current fresh-capture adapter uses
+macOS/CoreAudio and BlackHole 2ch; another driver or operating system needs an
+appropriate capture adapter, not different playback files.
 
-NumPy provides array operations, SciPy provides established signal filtering and
-spectral analysis, sounddevice uses PortAudio for explicit virtual-device capture,
-and soundfile uses libsndfile for WAV decoding/encoding. These host-only libraries
-avoid custom DSP, audio-driver and container implementations; none is bundled in
-firmware. Their exact dependencies are resolved in `uv.lock`.
-The optional `docs` dependency group adds Matplotlib for standard scientific
-plotting and PNG output; it is only needed to rebuild the README illustrations.
+## Sources and validation
 
-## Publication
+The collection includes the original recordings and the code that shapes,
+combines and checks them:
 
-Publish qualified WAVs, catalogue and checksums as versioned GitHub Release assets.
-Keep the files and their generating sources in this directory too. Release tags
-must identify the matching recipes, code and validation reports. Direct download
-links use an explicit tag, work without signing in and preserve the qualified
-file hashes. Publication uses the repository and tag in the generation recipe.
-After upload, run `uv run python validation/src/verify_downloads.py` to check every
-asset anonymously against the retained bytes.
+- [rew/](rew/README.md): REW API scripts, recipes and unmodified source recordings.
+- [scripted/](scripted/README.md): filtering, ramps, channel expansion and sequence assembly.
+- [validation/](validation/README.md): numerical checks, measured results and reproduction reports.
+- [catalogue.json](catalogue.json): formats, source hashes and section boundaries.
 
-Audio is [CC0 1.0](LICENSE-CC0). Code, recipes, metadata and documentation are
-[MIT licensed](LICENSE-MIT). See [LICENSE](LICENSE) for the scope of each licence.
+Validation measures the saved audio, including the tone's start and finish.
+These checks describe the files; the performance of your playback and measurement
+equipment must be established separately. See [contributor instructions](CONTRIBUTING.md)
+for updating the documentation or publishing another release.
 
-## REW capture
+## Licence
 
-The installed REW 5.40 Beta 101 / API 0.9.0 exposes signal configuration and
-Play/Stop, but no generator WAV export in its served API description or command
-list. We instead control REW's generator through the API and record BlackHole's
-virtual input. Source captures use float32 WAV to preserve the captured samples;
-published derivatives are 24-bit PCM. Capture latency/start phase may vary, so
-REW reproduction checks signal equivalence rather than promising identical bytes.
-Every retained capture and deterministic derivative has its own content hash.
-
-## Qualification and limits
-
-The validator measures the decoded published PCM, including the entire tone's
-onset and offset without an analysis window. The recipe requires at least 100 dB
-rejection outside 200–600 Hz and harmonics 2–9 below −110 dBR. Results tied to each
-file hash live in [validation/reports/signals.json](validation/reports/signals.json).
-These are numerical rejection limits: no finite-duration file has literally zero
-energy at every frequency outside its passband.
-
-An independent REW recapture passed the same spectral/format requirements.
-Regenerating from the retained captures produces identical WAV bytes under the
-pinned environment. Raw captures include startup audio and padding; the scripted
-recipe deliberately selects settled material and preserves shaped filter tails.
-
-The collection defines source signals, not the precision of a DAC, DUT, ADC or
-meter. The ABX host tests pass the actual files through acquisition mocks and the
-production estimators, completing the ten-second sequence in 7.14 seconds with
-20 ms routing/settling and fresh 20 ms captures. This is software timing evidence;
-physical acquisition performance remains to be qualified on the real hardware.
+The audio is dedicated to the public domain under [CC0 1.0](LICENSE-CC0).
+Code, recipes, metadata and documentation use the [MIT licence](LICENSE-MIT).
+See [LICENSE](LICENSE) for details.

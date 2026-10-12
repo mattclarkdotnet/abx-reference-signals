@@ -1,79 +1,132 @@
-# REW API tools
+# Make fresh source recordings with REW
 
-REW is the reference signal implementation. The intended workflow generates and
-captures its virtual audio output under API control, with the scripts and recipes
-retained here. The path is REW → BlackHole 2ch → sounddevice capture → float32 WAV.
-No microphone, physical output or OS default audio device is used.
+[Room EQ Wizard (REW)](https://www.roomeqwizard.com/) supplies the sine and burst
+generators used as the reference implementation for this collection. A script
+controls its generator through the local API and records its output through a
+virtual audio device:
 
-## Inspect an installation
+**REW → audio loopback driver → Python recorder → float32 WAV**
 
-Start a dedicated REW instance using its documented API options. For the current
-macOS installation:
+This is an optional way to reproduce the source material. To use the published
+WAVs, just [download them](../README.md#download). To rebuild from the recordings
+already included in the repository, use the [rebuild instructions](../scripted/README.md).
+
+## Install the capture tools
+
+1. Install **REW** from its [download page](https://www.roomeqwizard.com/), choosing
+   a build with the [documented API](https://www.roomeqwizard.com/betahelp/help/html/api.html).
+   The release baseline used a beta build; the REW site links to beta downloads.
+   REW is a separate application and is not installed by the Python setup.
+2. For the supplied macOS capture script, install **BlackHole 2ch**, a virtual
+   driver that passes audio between applications. Follow its
+   [installation instructions](https://github.com/ExistentialAudio/BlackHole#installation-instructions),
+   including any requested restart, then restart REW so it sees the device.
+3. Set up the repository's **uv/Python environment** using the
+   [rebuild setup instructions](../scripted/README.md#set-up-the-tools).
+4. In macOS **Privacy & Security → Microphone**, allow the terminal or application
+   running the recorder to record audio. This permission also covers virtual
+   inputs. Restart that application after changing the permission.
+
+The [release generation baseline](../README.md#release-generation-baseline) lists
+the REW, BlackHole and Python versions used for the latest release. Exact versions
+are recorded for reproducibility, not as general installation requirements.
+The current recorder uses macOS/CoreAudio and explicitly selects `BlackHole 2ch`;
+it does not select the system's default device. Another platform or loopback driver
+requires adapting that recorder's device selection and stream settings.
+
+## Start and inspect REW
+
+Run commands from the repository's top-level directory. On macOS, start a
+dedicated REW instance with its API on port 4736:
 
 ```sh
-open -n -a /Applications/REW/REW.app --args -api -port 4736 -nogui
+open -n -a REW.app --args -api -port 4736 -nogui
 ```
 
-From the collection directory:
+If macOS cannot find the application by name, replace `REW.app` with its installed
+path. Port 4736 is an example chosen for these scripts, not REW's default. REW may
+choose another port if it is occupied; use the actual port in `--base-url` below.
+See [REW's API guide](https://www.roomeqwizard.com/betahelp/help/html/api.html) for
+startup options and enabling the API from its preferences.
 
 ```sh
-uv run python rew/src/inspect_api.py --base-url http://127.0.0.1:4736 \
-  --output validation/reports/rew-api.json
+uv run --locked python rew/src/inspect_api.py \
+  --base-url http://127.0.0.1:4736 \
+  --output reproduction/rew-api.json
 ```
 
-This issues GET requests only. It records the version, served API fingerprint,
-generator endpoints, available commands and export-related operations for review.
-A successful inspection means the API was read; it does **not** mean WAV export
-is supported or a signal has passed validation. Report files are written only
-after all requests and response-shape checks succeed.
+The report records the version and available API operations without starting
+playback. In the release baseline, the API supported generator configuration and
+Play/Stop but offered no generator WAV-export operation. That is why these scripts
+record the virtual audio output rather than request an exported WAV.
 
-The selected port must belong to the intended instance. REW can choose a different
-port if the requested one is occupied. No script should stop an instance it did
-not start. For a dedicated instance started as above, shut it down after inspection
-using the documented application command:
+## Choose a capture recipe
+
+Make a local copy of the recipe:
+
+```sh
+cp rew/recipes/capture.json reproduction/capture.json
+```
+
+The capture script checks that `rew_version` in this recipe matches the version
+reported by REW. When using a different build, set `rew_version` in
+`reproduction/capture.json` to the `rew_version` value from your inspection report.
+This records the build you are actually testing; it does not establish API or
+signal compatibility. The script also checks the effective generator settings,
+and the resulting files must pass validation. Keep the release recipe unchanged.
+
+No BlackHole patch-version check is imposed. Its selected device must expose two
+input channels at 48 kHz without conversion. The supplied recipe defines a long
+400 Hz sine and repeated 1 kHz, one-millisecond cosine-windowed bursts every
+250 ms; the later processing script selects settled sections of these recordings.
+
+## Record and build
+
+```sh
+uv run --locked python rew/src/capture.py \
+  --base-url http://127.0.0.1:4736 \
+  --recipe reproduction/capture.json \
+  --output reproduction/rew/files
+```
+
+The script configures both output channels, checks the settings, starts REW's
+generator, records each signal and stops playback. It saves unmodified float32
+WAVs plus JSON files describing the actual settings and content hashes. It rejects
+dropped samples, silence, clipping and unequal channels, and refuses to overwrite
+an existing capture. Choose another output directory for a second attempt.
+
+To turn the new recordings into playable reference files, copy the processing
+recipe into the new working directory and run the generator and validator:
+
+```sh
+mkdir -p reproduction/scripted/recipes
+cp scripted/recipes/reference-v1.json reproduction/scripted/recipes/
+uv run --locked python scripted/src/generate.py --root reproduction
+uv run --locked python validation/src/validate.py --root reproduction
+```
+
+The new files are in `reproduction/scripted/files/`, with their measurements in
+`reproduction/validation/reports/signals.json`. The copied recipe retains the
+original release download URLs; for a new public collection, update its version,
+repository and release tag before publishing. [Contributor instructions](../CONTRIBUTING.md)
+describe that step.
+
+Raw recordings include startup padding and may contain audio draining from the
+previous generator setting. The processing script excludes the first second of
+active sine material and the first second of the burst recording, then retains
+whole probes. Fresh recordings need to meet the numerical requirements; their
+bytes need not match the release recordings.
+
+## Stop the dedicated instance
+
+After capture, close the REW instance started for this work:
 
 ```sh
 curl --fail -H 'Content-Type: application/json' \
   --data '{"command":"Shutdown"}' http://127.0.0.1:4736/application/command
 ```
 
-See the [REW API documentation](https://www.roomeqwizard.com/betahelp/help/html/api.html).
-
-## Generate source captures
-
-The checked installation reports `5.40 Beta 101 API 0.9.0`; its generator command
-list is `Play`, `Stop`. The full served API has no generator file-export endpoint,
-so direct API export is replaced by virtual-device capture.
-
-Install BlackHole 2ch, then restart the dedicated REW instance so it sees the new
-device. The driver must be available to REW and PortAudio. From this directory's
-parent, run:
-
-```sh
-uv run python rew/src/capture.py
-```
-
-The recipe in `recipes/capture.json` sets every relevant generator option and
-captures a long 400 Hz sine and repeated timing bursts. This is generation on
-the developer machine, separate from playback through DUTs. Float32 source WAVs
-retain the complete capture, including startup padding; downstream scripts make
-the shaped PCM24 reference files. The script refuses to overwrite retained files.
-Use `--output` for an independent reproduction and compare signal measurements.
-
-Qualified capture environment: macOS 27.2, BlackHole 2ch 0.7.1, the REW version
-in the recipe, and the Python/PortAudio packages resolved by `uv.lock` and the
-capture sidecars. macOS Microphone permission is also required for recording a
-virtual input: enable it for the terminal/host application running this command
-and restart that application after changing permission. No physical input is used.
-If a capture is interrupted by forcibly closing the host, stop the dedicated
-generator through `/generator/command` with `{"command":"Stop"}` before retrying.
-
-REW requires whole milliseconds for this burst setting. The retained recipe uses
-a 1 kHz, 1 ms cosine-windowed burst every 250 ms. The first second of the raw burst
-capture can contain the preceding generator's drain; the derivative selects
-settled repeated bursts after it and cuts halfway between bursts.
-
-Generation scripts must set all relevant options, read back effective settings,
-wait for completed capture, and validate samples. A dropped sample, conversion,
-wrong device, clipping or unequal stereo channels invalidates the capture. Retain
-unmodified REW outputs separately from later shaping, expansion or composition.
+If the recorder was interrupted before it could stop playback, stop the generator
+first using `/generator/command` with `{"command":"Stop"}`. If no signal is
+captured, check recording permission and that both REW and the recorder can see
+BlackHole 2ch; changing the system's default output is not needed.
