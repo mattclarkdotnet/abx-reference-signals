@@ -19,7 +19,7 @@ scripts to reproduce it.
 All downloads are **48 kHz, 24-bit PCM WAV**, with a peak level of **−12 dBFS**.
 Choose **stereo** for ordinary two-channel playback; choose **8-channel** when your
 player and audio interface need eight channels. Every channel contains the same
-signal, aligned in time. You do not need REW, BlackHole or Python to play the files.
+signal, aligned in time.
 
 See the [file guide](FILES.md) for exact filenames and sequence timings, or the
 [release page](https://github.com/mattclarkdotnet/abx-reference-signals/releases/tag/reference-v0.1.0)
