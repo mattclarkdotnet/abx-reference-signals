@@ -1,0 +1,34 @@
+{
+  "anonymous_downloads": [
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-2ch-48k-v0.1.0.wav",
+      "sha256": "c8947ea37c2e5e0ae6e90e0c16ffdbf98b712acc2c0121f348ed3d52e6d16757",
+      "bytes": 8640044
+    },
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/reference-400hz-8ch-48k-v0.1.0.wav",
+      "sha256": "4f453c0f9e5be40fd76ac79af71d7e1ec1b0e0d2527b9e5987bbca8a2976545a",
+      "bytes": 34560044
+    },
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-2ch-48k-v0.1.0.wav",
+      "sha256": "711f71f9efa031021d91e647350ac32cbcdff14a91a1d3dfa7c68528d1ad4ccd",
+      "bytes": 1152044
+    },
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/timing-probe-8ch-48k-v0.1.0.wav",
+      "sha256": "ef8ba38cb8486e831d6941cbbfef9e90386f283ca115774329a06896280e8797",
+      "bytes": 4608044
+    },
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-2ch-48k-v0.1.0.wav",
+      "sha256": "6fc5677cf3b4d4eea47b85c1e84d02e0dabb7f231ba50e1cd4437e2baa8b4137",
+      "bytes": 2880044
+    },
+    {
+      "url": "https://github.com/mattclarkdotnet/abx-reference-signals/releases/download/reference-v0.1.0/complete-characterisation-8ch-48k-v0.1.0.wav",
+      "sha256": "27ffc051a42df1a1744045464691039795c0d0ab97af99840d6945fa394ca983",
+      "bytes": 11520044
+    }
+  ]
+}
