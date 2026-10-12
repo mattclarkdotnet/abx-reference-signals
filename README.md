@@ -2,8 +2,7 @@
 
 Ready-to-play WAV files for checking audio levels, distortion, relative delay and
 polarity. Download a signal below, or use the included recordings, recipes and
-scripts to reproduce it. No ABX controller or other project-specific hardware is
-needed to use these files.
+scripts to reproduce it.
 
 ## Download
 

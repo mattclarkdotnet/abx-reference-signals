@@ -1,9 +1,8 @@
 # Rebuild the reference files
 
-The repository includes the original REW recordings, so you can rebuild the WAVs
-without installing REW, an audio driver or any ABX controller software. The scripts
-add smooth ramps, filter the reference tone, assemble the combined sequence and
-write stereo and eight-channel files.
+Rebuild the WAVs from the included REW recordings using the Python environment
+described below. The scripts add smooth ramps, filter the reference tone,
+assemble the combined sequence and write stereo and eight-channel files.
 
 ## Set up the tools
 
