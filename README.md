@@ -16,11 +16,43 @@ user's source system. The controller observes the DUT outputs; these tools neith
 control DUT playback nor turn the phone into the audio source. For absolute
 voltage calibration, the meter reading is the reference, not a digital file level.
 
+## Waveforms
+
+These plots use the actual samples in the published WAVs. All channels in both
+the stereo and eight-channel versions carry the same waveform, so each plot
+applies to both downloads. Amplitude is relative to digital full scale; overviews
+show the minimum and maximum samples in each plotted interval, preserving brief
+peaks. Close-ups labelled “samples” show the waveform itself.
+
+### 400 Hz reference tone
+
+A 30-second steady tone with a smooth, bandwidth-limited start and finish. Use it
+for voltage calibration or standalone level and distortion measurements.
+
+![400 Hz reference tone: full timeline, smooth onset and offset, and a close-up of the sine wave.](docs/waveforms/reference-400hz.png)
+
+### Timing and polarity probe
+
+A four-second train of short probes, repeated every 250 ms. Each probe is a
+one-millisecond, cosine-windowed 1 kHz burst, returning to silence between probes.
+The close-up shows its positive and negative lobes.
+
+![Timing and polarity probe: repeated bursts across four seconds and the sample waveform of one burst.](docs/waveforms/timing-probe.png)
+
+### Complete DUT characterisation
+
+One ten-second file combines the tone for levels and distortion with the probes
+for delay and polarity. It starts with 0.5 seconds of silence, followed by
+5.5 seconds of tone, a 0.25-second gap, 3.5 seconds of probes and a 0.25-second tail.
+
+![Complete characterisation: ten-second tone-and-probe sequence with a close-up of the transition through silence.](docs/waveforms/complete-characterisation.png)
+
 ## Layout
 
 - `rew/`: REW API tools, generation recipes and unmodified virtual-device captures.
 - `scripted/`: subsequent signal processing, channel expansion and composition.
 - `validation/`: file qualification tools and reports tied to the checked files.
+- `docs/waveforms/`: PNG illustrations generated from the published PCM files.
 
 The generation method determines the directory. An API script that asks REW to
 generate samples still produces a REW original. Shaping or combining that result
@@ -39,6 +71,16 @@ uv run python -m unittest discover -s validation/tests
 uv run python scripted/src/catalogue_readme.py
 ```
 
+To rebuild the 2000-pixel-wide README images from the retained WAVs:
+
+```sh
+uv run --locked --group docs python scripted/src/plot_waveforms.py
+```
+
+The plotting script checks the catalogue hashes and confirms that all channel
+variants share identical samples before drawing a single plot for each waveform.
+It does not regenerate or modify the audio.
+
 The Python pin and lockfile live here so the directory can be used independently
 of the controller workspace. REW generation needs the documented REW installation,
 its local API and BlackHole 2ch; see [REW instructions](rew/README.md).
@@ -48,6 +90,8 @@ spectral analysis, sounddevice uses PortAudio for explicit virtual-device captur
 and soundfile uses libsndfile for WAV decoding/encoding. These host-only libraries
 avoid custom DSP, audio-driver and container implementations; none is bundled in
 firmware. Their exact dependencies are resolved in `uv.lock`.
+The optional `docs` dependency group adds Matplotlib for standard scientific
+plotting and PNG output; it is only needed to rebuild the README illustrations.
 
 ## Publication
 
